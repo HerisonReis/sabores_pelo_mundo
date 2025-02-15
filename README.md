@@ -2,7 +2,7 @@
 
 ## Contexto do Problema de Negócio
 
-A Sabores Pelo Mundo é uma empresa de marketplace de restaurantes, cujo objetivo principal é conectar clientes e  restaurantes de maneira eficiente. Por meio da plataforma, os restaurantes podem se cadastrar e disponibilizar informações como endereço, tipo de culinária servida, opções de entrega, reservas e a nota de avaliação recebida pelos clientes.
+A Sabores Pelo Mundo é uma empresa de marketplace de restaurantes, cujo objetivo principal é conectar clientes e  restaurantes de maneira eficiente. Por meio da plataforma, os restaurantes podem se cadastrar e disponibilizar informações como tipo de culinária servida e nota de avaliação recebida pelos clientes.
 
 O CEO da Sabores Pelo Mundo, Kleiton Guerra, foi recentemente contratado e precisa de uma compreensão detalhada sobre o negócio para tomar decisões estratégicas e alavancar a empresa. Para isso, é necessária uma análise dos dados disponíveis na empresa e a criação de dashboards que apresentem respostas para perguntas chaves relacionadas aos restaurantes, países, cidades, tipos de culinária e outros aspectos relevantes.
 
