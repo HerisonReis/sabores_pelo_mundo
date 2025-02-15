@@ -106,7 +106,7 @@ O painel estratégico foi desenvolvido utilizando as métricas que refletem as 4
 ## O produto final do projeto
 
 Painel online, hospedado em um Cloud e disponível para acesso em qualquer dispositivo conectado à internet.
-O painel pode ser acesso através desse link: https://ftc-projeto-final-herison.streamlit.app/
+O painel pode ser acesso através desse link: https://saborespelomundo.streamlit.app/
 
 
 ## Conclusão
