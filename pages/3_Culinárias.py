@@ -20,8 +20,7 @@ df = pd.read_csv('zomato.csv')
 
 #Tamanho da página
 
-st.set_page_config(page_title="Cidades",layout="wide",page_icon="🌆")
-
+st.set_page_config(page_title="Culinárias",layout="wide",page_icon="🍽️")
 
 #Preenchimento dos nomes dos países
 COUNTRIES = {
@@ -57,8 +56,7 @@ def create_price_tye(price_range):
     else:
         return "gourmet"
 
-    
-    
+
 # Definindo um mapeamentode cores fixo para os países
 color_map = {
     'India': '#636EFA',             # Azul
@@ -77,11 +75,11 @@ color_map = {
     'Qatar': '#D4A5A5',                         # Rosa antigo
     'Philippines': '#E76F51',                   # Laranja queimado
     'Indonesia': '#2A9D8F'                      # Verde escuro
-}
-
+}    
+    
+    
+    
 # Criação do nome das cores
-
-
 COLORS = {
     "3F7E00": "darkgreen",
     "5BA829": "green",
@@ -123,110 +121,110 @@ st.sidebar.markdown("""___""")
 #================= Filtros utilizando o Country Code ========
 country_options = st.sidebar.multiselect('Escolha o(s) país(es) abaixo', ['India','United States of America','England','South Africa','United Arab Emirates','New Zeland','Brazil','Singapure','Australia', 'Canada','Turkey','Sri Lanka','Qatar','Philippines','Indonesia'], default=[])                                                                                  
 
-
 if country_options:
     df = df[df['Country Code'].isin( country_options )]
 
-#st.dataframe( df )
+
+st.sidebar.markdown("""___""")
+
+#======================= Quantidade de restaurantes visualizados =================================
+
+
+restaurant_slider = st.sidebar.slider('Até quantos restaurantes?',0,20,10)
+                                
+st.write(restaurant_slider)
+
+
+st.sidebar.markdown("""___""")
+
 
 #cópia do dataframe
 df1 = df.copy()
 
-
 # =============================================
 # Layout no streamlit
 # =============================================
-    
-    
-with st.container():
- 
-    restaurant_city = df.loc[:, ['Restaurant ID', 'City', 'Country Code']] \
-                        .groupby(['City', 'Country Code']) \
-                        .nunique() \
-                        .reset_index() \
-                        .sort_values(by='Restaurant ID', ascending=False)
-    
-    r_city = restaurant_city.head(10)
-     
-    # Mapeando a cor do país para a cidade usando a coluna 'Country Code'
-    r_city['Country Name'] = r_city['Country Code'].map(COUNTRIES)
-    r_city['Color'] = r_city['Country Code'].map(color_map)
-    
-    # Tratando possíveis valores ausentes (NaN)
-    r_city['Color'] = r_city['Color'].fillna('#808080')  # Usando cor cinza para NaN
-    
-    # Criando o gráfico
-    fig = px.bar(r_city, x='City', y='Restaurant ID', color='Country Code', color_discrete_map=color_map, title='Top 10 Cidades com mais Restaurantes na Base de Dados')
-    
-    # Remove títulos dos eixos no layout
-    fig.update_layout(
-        xaxis_title=None,  # Remove o título do eixo X
-        yaxis_title=None   # Remove o título do eixo Y
-    )
         
-    # Exibindo o gráfico
-    st.plotly_chart(fig, use_container_width=True)
-
+with st.container():
+    st.markdown('<h3 style="font-size:17px;">Melhores restaurantes dos principais tipos culinários</h3>', unsafe_allow_html=True)
     
+    col1, col2, col3, col4, col5 = st.columns(5)
+    
+    with col1:
+        culinaria_maior_nota = df.loc[:, ['Cuisines','Aggregate rating']].groupby('Cuisines').mean().reset_index().sort_values(by='Aggregate rating',ascending=False )
+        
+       
+        culinaria_maior_nota.iloc[0,0]
+        st.markdown(f'{culinaria_maior_nota.iloc[0,1]}/5.0')
+       
+    
+    with col2:
+      
+        culinaria_maior_nota.iloc[1,0]
+        st.markdown(f'{round(culinaria_maior_nota.iloc[1,1],2)}/5.0')
+    
+    with col3:
+        
+        culinaria_maior_nota.iloc[2,0]
+        st.markdown(f'{round(culinaria_maior_nota.iloc[2,1],2)}/5.0')
+        
+        
+    with col4:
+        
+        culinaria_maior_nota.iloc[3,0]
+        st.markdown(f'{round(culinaria_maior_nota.iloc[3,1],2)}/5.0')
+        
+    with col5:
+        
+        culinaria_maior_nota.iloc[4,0]
+        st.markdown(f'{round(culinaria_maior_nota.iloc[4,1],2)}/5.0')
+        
+        
+
+with st.container():
+    
+    restaurant_text = f' Top {restaurant_slider} Restaurantes'
+    
+    
+    st.markdown(f'<h3 style="font-size:17px;">{restaurant_text}</h3>', unsafe_allow_html=True)
+
+    maior_nota_restaurante = df.loc[:,['Aggregate rating','Restaurant Name','Restaurant ID','Country Code','City','Cuisines','Average Cost for two','Votes']].groupby('Restaurant Name').mean(numeric_only=True).reset_index().sort_values(by='Aggregate rating', ascending=False)
+
+          
+    restaurante10_maior_nota = maior_nota_restaurante.head(restaurant_slider)
+        
+    restaurante10_maior_nota
+        
 with st.container():
     col1, col2 = st.columns(2)
-    with col1: 
         
-        acima4 = df['Aggregate rating'] >= 4
-        df1 = df.loc[acima4, :]
-        acima4_city = df1.loc[:,['City','Aggregate rating','Restaurant ID','Country Code']].groupby(['City', 'Country Code']).nunique().reset_index().sort_values(by='Aggregate rating',ascending=False)
+    with col1:    
+        culinaria_maior_nota = df.loc[:, ['Cuisines','Aggregate rating','Country Code']].groupby(['Cuisines','Country Code']).mean().reset_index().sort_values(by='Aggregate rating',ascending=False)
             
-        acima4_c = acima4_city.head(7)
-        
-        # **Ordena o DataFrame em ordem decrescente**
-        acima4_c = acima4_c.sort_values(by='Restaurant ID', ascending=False)
-        
+        culinaria_top10 = culinaria_maior_nota.head(restaurant_slider)
             
-        fig = px.bar( acima4_c , x='City', y='Restaurant ID', color='Country Code', color_discrete_map=color_map, title='Top 7 Cidades com Mais Restaurantes Avaliados')
+        fig = px.bar( culinaria_top10, x='Cuisines', y='Aggregate rating', color='Country Code', color_discrete_map=color_map, title= f' Top {restaurant_slider} Melhores Tipos de Culinárias')
         
-           # Remove títulos dos eixos no layout
+            # Remove títulos dos eixos no layout
         fig.update_layout(
             xaxis_title=None,  # Remove o título do eixo X
-            yaxis_title=None   # Remove o título do eixo Y
+            #yaxis_title=None   # Remove o título do eixo Y
+        )
+        
+        st.plotly_chart( fig, use_container_width=True )
+                  
+                
+    with col2:       
+        culinaria_menor_nota = df.loc[:, ['Cuisines','Aggregate rating','Country Code']].groupby(['Cuisines','Country Code']).mean().reset_index().sort_values(by='Aggregate rating',ascending=True)
+            
+        culinaria_top10_menos = culinaria_menor_nota.head(restaurant_slider)
+            
+        fig = px.bar( culinaria_top10_menos, x='Cuisines' ,y='Aggregate rating', color='Country Code', color_discrete_map=color_map, title= f' Top {restaurant_slider} Piores Tipos de Culinárias')
+        
+        # Remove títulos dos eixos no layout
+        fig.update_layout(
+            xaxis_title=None,  # Remove o título do eixo X
+            #yaxis_title=None   # Remove o título do eixo Y
         )
             
         st.plotly_chart( fig, use_container_width=True )
-            
-    with col2:
-        
-        abaixo_2_5 = df['Aggregate rating'] <= 2.5
-
-        df2 = df.loc[abaixo_2_5, :]
-
-        abaixo_2_5_city = df2.loc[:,['City','Aggregate rating','Restaurant ID','Country Code']].groupby(['City', 'Country Code']).nunique().reset_index().sort_values(by='Aggregate rating',ascending=False)
-            
-        
-        abaixo2_5city = abaixo_2_5_city.head(7)
-            
-            
-        fig = px.bar( abaixo2_5city , x='City', y='Restaurant ID', color='Country Code', color_discrete_map=color_map, title= 'Top 7 Cidades com Restaurantes com média de avalização abaixo de 2,5')
-        
-           # Remove títulos dos eixos no layout
-        fig.update_layout(
-            xaxis_title=None,  # Remove o título do eixo X
-            yaxis_title=None   # Remove o título do eixo Y
-        )
-            
-        st.plotly_chart( fig, use_container_width=True )
-            
-            
-with st.container():
-    
-    culinaria_city = df.loc[:, ['Cuisines','City','Country Code']].groupby(['City', 'Country Code']).nunique().reset_index().sort_values(by='Cuisines',ascending=False)
-        
-    top10_culinaria_city = culinaria_city.head(10)
-        
-    fig = px.bar( top10_culinaria_city, x='City', y='Cuisines', color='Country Code', color_discrete_map=color_map, title= 'Top 10 Cidades com mais restaurantes com tipo culinários distintos' )
-    
-     # Remove títulos dos eixos no layout
-    fig.update_layout(
-        xaxis_title=None,  # Remove o título do eixo X
-        yaxis_title=None   # Remove o título do eixo Y
-    )
-        
-    st.plotly_chart( fig, use_container_width=True )

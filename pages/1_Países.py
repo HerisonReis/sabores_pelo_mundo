@@ -70,11 +70,12 @@ color_map = {
     'New Zeland': '#B6E880',        # Verde limão
     'England': '#FFB400',           # Amarelo dourado
     'United Arab Emirates': '#00C2C7', # Azul turquesa
-    'Turkey': '#F95D6A',            # Vermelho coral
-    'Sri Lanka': '#9C88FF',         # Lavanda
-    'Qatar': '#D4A5A5',             # Rosa antigo
-    'Philippines': '#E76F51',       # Laranja queimado
-    'Indonesia': '#2A9D8F'          # Verde escuro
+    'Singapure': '#8A2BE2',                     # Azul violeta
+    'Turkey': '#F95D6A',                        # Vermelho coral
+    'Sri Lanka': '#9C88FF',                     # Lavanda
+    'Qatar': '#D4A5A5',                         # Rosa antigo
+    'Philippines': '#E76F51',                   # Laranja queimado
+    'Indonesia': '#2A9D8F'                      # Verde escuro
 }
 
 
@@ -118,12 +119,11 @@ st.sidebar.image( image, width=150)
 st.sidebar.markdown("""___""")
 
 #================= Filtros utilizando o Country Code ========
-country_options = st.sidebar.multiselect('Escolha o(s) país(es) abaixo', ['India','United States of America','England','South Africa','United Arab Emirates','New Zeland','Brazil','Australia', 'Canada','Turkey','Sri Lanka','Qatar','Philippines','Indonesia'], default=['Brazil','India','Canada','United States of America'])
-                                                                                      
+country_options = st.sidebar.multiselect('Escolha o(s) país(es) abaixo', ['India','United States of America','England','South Africa','United Arab Emirates','New Zeland','Brazil','Singapure','Australia', 'Canada','Turkey','Sri Lanka','Qatar','Philippines','Indonesia'], default=[])                                                                                  
 
-#Filtro de Códigos dos países
-linhas_selecionadas = df['Country Code'].isin( country_options )
-df = df.loc[linhas_selecionadas, :]
+
+if country_options:
+    df = df[df['Country Code'].isin( country_options )]
 
 
 #cópia do dataframe

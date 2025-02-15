@@ -4,6 +4,8 @@ from haversine import haversine
 import plotly.express as px
 import plotly.graph_objects as go
 import folium
+import matplotlib.pyplot as plt
+import importlib
 
 # Bibliotecas necessárias
 import streamlit as st
@@ -58,21 +60,22 @@ def create_price_tye(price_range):
     
 # Definindo um mapeamentode cores fixo para os países
 color_map = {
-    'India': '#636EFA',             # Azul
-    'United States of America': '#EF553B',     # Vermelho
-    'Brazil': '#00CC96',            # Verde
-    'Australia': '#AB63FA',         # Roxo
-    'Canada': '#FFA15A',            # Laranja
-    'United Kingdom': '#19D3F3',    # Azul claro
-    'South Africa': '#FF6692',      # Rosa
-    'New Zeland': '#B6E880',        # Verde limão
-    'England': '#FFB400',           # Amarelo dourado
-    'United Arab Emirates': '#00C2C7', # Azul turquesa
-    'Turkey': '#F95D6A',            # Vermelho coral
-    'Sri Lanka': '#9C88FF',         # Lavanda
-    'Qatar': '#D4A5A5',             # Rosa antigo
-    'Philippines': '#E76F51',       # Laranja queimado
-    'Indonesia': '#2A9D8F'          # Verde escuro
+    'India': '#636EFA',                         # Azul
+    'United States of America': '#EF553B',      # Vermelho
+    'Brazil': '#00CC96',                        # Verde
+    'Australia': '#AB63FA',                     # Roxo
+    'Canada': '#FFA15A',                        # Laranja
+    'United Kingdom': '#19D3F3',                # Azul claro
+    'South Africa': '#FF6692',                  # Rosa
+    'New Zeland': '#B6E880',                    # Verde limão
+    'England': '#FFB400',                       # Amarelo dourado
+    'United Arab Emirates': '#00C2C7',          # Azul turquesa
+    'Singapure': '#8A2BE2',                     # Azul violeta
+    'Turkey': '#F95D6A',                        # Vermelho coral
+    'Sri Lanka': '#9C88FF',                     # Lavanda
+    'Qatar': '#D4A5A5',                         # Rosa antigo
+    'Philippines': '#E76F51',                   # Laranja queimado
+    'Indonesia': '#2A9D8F'                      # Verde escuro
 }
 
 
@@ -117,11 +120,11 @@ st.sidebar.image( image, width=150)
 st.sidebar.markdown("""___""")
 
 #================= Filtros utilizando o Country Code ========
-country_options = st.sidebar.multiselect('Escolha o(s) país(es) abaixo', ['India','United States of America','England','South Africa','United Arab Emirates','New Zeland','Brazil','Australia', 'Canada','Turkey','Sri Lanka','Qatar','Philippines','Indonesia'], default=['Brazil','India','Canada','United States of America'])                                                                                  
+country_options = st.sidebar.multiselect('Escolha o(s) país(es) abaixo', ['India','United States of America','England','South Africa','United Arab Emirates','New Zeland','Brazil','Australia', 'Canada','Turkey','Sri Lanka','Qatar','Philippines','Indonesia'], default=[])                                                                                  
 
-#Filtro de Códigos dos países
-linhas_selecionadas = df['Country Code'].isin( country_options )
-df = df.loc[linhas_selecionadas, :]
+
+if country_options:
+    df = df[df['Country Code'].isin( country_options )]
 
 #st.dataframe( df )
 
@@ -185,7 +188,7 @@ with st.container():
             
 
 with st.container():
-    maps_restaurant = df.groupby('Country Code', as_index=False).median()
+    maps_restaurant = df.groupby('Country Code', as_index=False).median(numeric_only=True)
     map = folium.Map(zoom_start=2, tiles="CartoDB dark_matter")
 
     # Adicionando marcadores com cores personalizadas
