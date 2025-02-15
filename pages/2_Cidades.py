@@ -156,7 +156,7 @@ with st.container():
     r_city['Color'] = r_city['Color'].fillna('#808080')  # Usando cor cinza para NaN
     
     # Criando o gráfico
-    fig = px.bar(r_city, x='City', y='Restaurant ID', color='Country Code', color_discrete_map=color_map, title='Top 10 Cidades com mais Restaurantes na Base de Dados')
+    fig = px.bar(r_city, x='City', y='Restaurant ID', color='Country Code', color_discrete_map=color_map, title='Top 10 Cidades com mais Restaurantes')
     
     # Remove títulos dos eixos no layout
     fig.update_layout(
@@ -204,7 +204,7 @@ with st.container():
         abaixo2_5city = abaixo_2_5_city.head(7)
             
             
-        fig = px.bar( abaixo2_5city , x='City', y='Restaurant ID', color='Country Code', color_discrete_map=color_map, title= 'Top 7 Cidades com Restaurantes com média de avalização abaixo de 2,5')
+        fig = px.bar( abaixo2_5city , x='City', y='Restaurant ID', color='Country Code', color_discrete_map=color_map, title= 'Top 7 Cidades com Restaurantes com média de avaliação abaixo de 2,5')
         
            # Remove títulos dos eixos no layout
         fig.update_layout(
