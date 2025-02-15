@@ -130,7 +130,7 @@ st.sidebar.markdown("""___""")
 #======================= Quantidade de restaurantes visualizados =================================
 
 
-restaurant_slider = st.sidebar.slider('Até quantos restaurantes?',0,20,10)
+restaurant_slider = st.sidebar.slider('Top Gastronomia',0,20,10)
                                 
 st.write(restaurant_slider)
 
@@ -146,12 +146,12 @@ df1 = df.copy()
 # =============================================
         
 with st.container():
-    st.markdown('<h3 style="font-size:17px;">Melhores restaurantes dos principais tipos culinários</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="font-size:17px;">Melhores Restaurantes </h3>', unsafe_allow_html=True)
     
     col1, col2, col3, col4, col5 = st.columns(5)
     
     with col1:
-        culinaria_maior_nota = df.loc[:, ['Cuisines','Aggregate rating']].groupby('Cuisines').mean().reset_index().sort_values(by='Aggregate rating',ascending=False )
+        culinaria_maior_nota = df.loc[:, ['Cuisines','Aggregate rating','Restaurant Name']].groupby('Restaurant Name').mean(numeric_only=True).reset_index().sort_values(by='Aggregate rating',ascending=False )
         
        
         culinaria_maior_nota.iloc[0,0]
